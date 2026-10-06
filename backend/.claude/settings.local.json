@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(php artisan route:list 2>&1 | Select-Object -First 40)",
+      "PowerShell(php artisan optimize:clear 2>&1)",
+      "PowerShell(Get-Content *)",
+      "PowerShell(php artisan tinker --execute=\"echo App\\\\Models\\\\User::count\\(\\).' users; latest: '.optional\\(App\\\\Models\\\\User::latest\\(\\)->first\\(\\)\\)->email;\" 2>&1)"
+    ]
+  }
+}

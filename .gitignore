@@ -1,0 +1,28 @@
+# === Sekrety — NIGDY nie commitować ===
+.env
+.env.backup
+.env.production
+**/.env
+
+# === Zależności (odtwarzalne przez composer install / npm install) ===
+/backend/vendor/
+/backend/node_modules/
+/Frontend/frontend/node_modules/
+
+# === Artefakty budowania ===
+/backend/public/build/
+/backend/public/hot
+/backend/public/storage
+/backend/storage/*.key
+/Frontend/frontend/dist/
+/Frontend/frontend/dist-ssr/
+
+# === Logi ===
+*.log
+
+# === System / edytor ===
+.DS_Store
+Thumbs.db
+
+# === Stan narzedzi (nie czesc projektu) ===
+**/.ailoc2-metrics/
