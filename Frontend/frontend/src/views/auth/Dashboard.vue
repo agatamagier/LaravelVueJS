@@ -19,7 +19,7 @@ import { onMounted } from 'vue'
               <p class="text-slate-200">Welcome, {{ auth.user?.name }}</p>
               <p class="text-slate-200">{{ auth.user?.email }}</p>
       </div>
-      <button @click="logout" class="text-white bg-brand box-border border hover:bg-brand-strong focus:ring-4 focus:ring-brand-medium shadow-xs font-medium leading-5 rounded-base text-sm px-4 py-2.5 focus:outline-none">Logout</button>
+      <button @click="logout" class="text-white bg-blue-700 box-border border hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 shadow-sm font-medium leading-5 rounded-lg text-sm px-4 py-2.5 focus:outline-none">Logout</button>
     </div>
   </main>
 </template>

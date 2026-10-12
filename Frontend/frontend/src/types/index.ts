@@ -14,3 +14,18 @@ export interface User {
   name: string;
   email: string;
 }
+
+export interface Post {
+  id: number;
+  title: string;
+  slug: string;
+  body: string;
+  published: boolean;
+  createdAt: string;
+}
+
+export interface LaravelData {
+  data: Post[];
+  links: any;
+  meta: any;
+}

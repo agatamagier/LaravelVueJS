@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\PostResource;
 use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class PostController extends Controller
 {
@@ -12,7 +14,8 @@ class PostController extends Controller
      */
     public function index()
     {
-
+       $posts = auth()->user()->posts()->orderBy('created_at', 'desc')->paginate(5);
+       return PostResource::collection($posts);
     }
 
 
@@ -22,15 +25,23 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->validate([
+            'title' => 'required|string|max:255',
+            'body' => 'required|string',
+        ]);
+        $data['slug'] = Str::slug($data['title']);
+      auth()->user()->posts()->create($data);
+
+        return response()->json(['message' => 'Post created successfully', 'status' => 'success'], 201);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Post $post)
+    public function show($id)
     {
-        //
+        $post = Post::findOrFail($id);
+        return new PostResource($post);
     }
 
 

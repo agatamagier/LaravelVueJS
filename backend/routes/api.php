@@ -4,8 +4,10 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', \App\Http\Controllers\WelcomeController::class);
-Route::get('/post/{post:slug}', \App\Http\Controllers\PostShowController::class);
+Route::get('/', \App\Http\Controllers\Frontend\WelcomeController::class);
+
+Route::get('/post/{post:slug}', \App\Http\Controllers\Frontend\PostShowController::class);
+
 Route::apiResource('dashboard/posts', \App\Http\Controllers\PostController::class)
     ->middleware(['auth:sanctum'])
     ->except(['create', 'edit']);

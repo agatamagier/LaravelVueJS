@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@formkit/vue": "^2.1.2",
+    "@heroicons/vue": "^2.2.0",
     "axios": "^1.20.0",
     "pinia": "^4.0.3",
     "pinia-plugin-persistedstate": "^4.7.1",

@@ -4,6 +4,7 @@ import HomeView from '../views/HomeView.vue'
 import Login from '@/views/auth/Login.vue'
 import { useAuthStore } from '@/store/auth'
 
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -37,6 +38,22 @@ const router = createRouter({
       },
     },
         {
+      path: '/dashboard/posts',
+      name: 'PostIndex',
+      component: () => import('@/views/posts/PostIndex.vue'),
+      meta: {
+        requiresAuth: true,
+      },
+    },
+    {
+      path: '/dashboard/posts/create',
+      name: 'PosteCreate',
+      component: () => import('@/views/posts/PostCreate.vue'),
+      meta: {
+        requiresAuth: true,
+      },
+    },
+    {
       path: '/404',
       name: '404',
       component: () => import('@/views/404.vue')
