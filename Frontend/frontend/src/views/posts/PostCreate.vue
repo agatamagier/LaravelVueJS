@@ -1,26 +1,7 @@
 <script setup lang="ts">
-import type { FormKitNode } from '@formkit/core';
-import axiosInstance from '@/lib/axios'
-import axios from 'axios'
-import router from '@/router';
+import { usePostStore } from '@/store/post'
 
-  type PostForm = {
-    title: string;
-    body: string;
-};
-  const createPost = async (payload: PostForm, node?: FormKitNode) => {
-    try {
-      await axiosInstance.get('/sanctum/csrf-cookie', { baseURL: 'http://localhost:8000' })
-      await axiosInstance.post('/dashboard/posts', payload);
-      router.push('/dashboard/posts');
-    } catch (error) {
-            if (error instanceof axios.AxiosError && error.response?.status === 422) {
-        node?.setErrors([], error.response?.data.errors)
-      } else {
-        console.error(error)
-      }
-    }
-  }
+  const { createPost } = usePostStore()
 </script>
 <template>
     <h1 class="text-3xl dark:text-white m-4">Create post</h1>

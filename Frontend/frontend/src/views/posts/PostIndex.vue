@@ -12,7 +12,6 @@ const getResults = async (page = 1) => {
 }
 
 
-
 const posts = ref<Post[]>([])
 
 
