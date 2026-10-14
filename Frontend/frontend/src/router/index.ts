@@ -3,6 +3,8 @@ import Register from '../views/auth/Register.vue'
 import HomeView from '../views/HomeView.vue'
 import Login from '@/views/auth/Login.vue'
 import { useAuthStore } from '@/store/auth'
+import PostView from '@/views/posts/PostView.vue'
+import PostEdit from '@/views/posts/PostEdit.vue'
 
 
 const router = createRouter({
@@ -52,6 +54,24 @@ const router = createRouter({
       meta: {
         requiresAuth: true,
       },
+    },
+        {
+      path: '/dashboard/posts/:slug',
+          name: 'PostView',
+      component: PostView,
+      meta: {
+        requiresAuth: true,
+          },
+      props: true,
+    },
+            {
+      path: '/dashboard/posts/:slug/edit',
+          name: 'PostEdit',
+      component: PostEdit,
+      meta: {
+        requiresAuth: true,
+          },
+      props: true,
     },
     {
       path: '/404',

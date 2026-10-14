@@ -2,9 +2,8 @@
 import { ref, onMounted } from 'vue'
 import axiosInstance from '@/lib/axios'
 import type { Post, LaravelData } from '@/types'
-import router from '@/router';
 import { TailwindPagination } from 'laravel-vue-pagination';
-
+  import { EyeIcon, PencilSquareIcon } from '@heroicons/vue/24/solid';
   const laravelData = ref<LaravelData>({data: [], links:{}, meta:{} });
 
 const getResults = async (page = 1) => {
@@ -16,16 +15,6 @@ const getResults = async (page = 1) => {
 
 const posts = ref<Post[]>([])
 
-const fetchPosts = async () => {
-  try {
-    const response = await axiosInstance.get('/dashboard/posts')
-    posts.value = response.data
-       router.push('/dashboard/posts');
-    console.log(posts.value)
-  } catch (error) {
-    console.error(error)
-  }
-}
 
 onMounted(async () => {
   await getResults();
@@ -64,11 +53,23 @@ onMounted(async () => {
               <td class="px-6 py-4">{{ post.published ? 'Yes' : 'No' }}</td>
               <td class="px-6 py-4">{{ post.createdAt}}</td>
               <td class="px-6 py-4">{{ post.slug }}</td>
+              <td class="px-6 py-4">
+                <div class="flex space-x-4">
+                  <RouterLink :to="{ name: 'PostView', params: { slug: post.slug }}">
+                  <EyeIcon class="w-6 h-6 text-blue-500 hover:text-blue-700 cursor-pointer" />
+                  </RouterLink>
+                           <RouterLink :to="{ name: 'PostEdit', params: { slug: post.slug }}">
+                  <PencilSquareIcon class="w-6 h-6 text-green-500 hover:text-green-700 cursor-pointer" />
+                  </RouterLink>
+                </div>
+              </td>
             </tr>
             </template>
+            <template v-else>
             <tr v-if="posts.length === 0">
               <td colspan="4" class="px-6 py-4 text-center">No posts yet.</td>
             </tr>
+            </template>
           </tbody>
         </table>
             <TailwindPagination

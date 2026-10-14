@@ -38,9 +38,8 @@ class PostController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show($id)
+    public function show(Post $post)
     {
-        $post = Post::findOrFail($id);
         return new PostResource($post);
     }
 
@@ -50,7 +49,12 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-        //
+         $data = $request->validate([
+            'title' => 'required|string|max:255',
+            'body' => 'required|string',
+        ]);
+        $post->update($data);
+        return response()->json(['message' => 'Post updated successfully', 'status' => 'success'], 200);
     }
 
     /**
