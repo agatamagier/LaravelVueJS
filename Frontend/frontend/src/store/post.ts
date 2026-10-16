@@ -10,15 +10,15 @@ import type { FormKitNode } from '@formkit/core'
 import axios from 'axios'
 
 export const usePostStore = defineStore('post', () => {
-  const postsCollections = ref<LaravelResponseCollection<Post | null>[]>([])
+  const postsCollection = ref<LaravelResponseCollection<Post> | null>(null)
   const post = ref<Post | null>(null)
   const isLoading = ref<boolean>(false)
 
   const getPosts = async (page: number) => {
     isLoading.value = true
     try {
-      const {data} = await axiosInstance.get<LaravelResponseCollection<Post | null>[]>(`/dashboard/posts?page=${page}`)
-      postsCollections.value = data
+      const {data} = await axiosInstance.get<LaravelResponseCollection<Post>>(`/dashboard/posts?page=${page}`)
+      postsCollection.value = data
     } catch (error) {
       console.error(error)
     } finally {
@@ -67,14 +67,28 @@ await router.push('/dashboard/posts')
       isLoading.value = false
     }
   }
+
+  const deletePost = async (page: number, slug: string) => {
+    isLoading.value = true
+    try {
+      await axiosInstance.delete(`/dashboard/posts/${slug}`)
+      await getPosts(page)
+      await router.push('/dashboard/posts')
+    } catch (error) {
+      console.error(error)
+    } finally {
+      isLoading.value = false
+    }
+  }
   return {
-    postsCollections,
+    postsCollection,
     post,
     isLoading,
     getPosts,
     getPost,
     createPost,
-    updatePost
+    updatePost,
+    deletePost
   }
 }, {
   persist: {

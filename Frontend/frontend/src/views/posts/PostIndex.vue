@@ -1,22 +1,27 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import axiosInstance from '@/lib/axios'
 import type { Post, LaravelData } from '@/types'
 import { TailwindPagination } from 'laravel-vue-pagination';
-  import { EyeIcon, PencilSquareIcon } from '@heroicons/vue/24/solid';
-  const laravelData = ref<LaravelData>({data: [], links:{}, meta:{} });
+  import { EyeIcon, PencilSquareIcon, TrashIcon } from '@heroicons/vue/24/solid';
+  import { usePostStore } from '@/store/post'
+import { useRouter } from 'vue-router'
 
-const getResults = async (page = 1) => {
-  const { data } = await axiosInstance.get(`/dashboard/posts?page=${page}`)
-    laravelData.value = await data
-}
-
+  const route = useRouter()
+  const postStore = usePostStore()
+  const router = useRouter()
+const page= ref<number>(route.currentRoute.value.query.page || 1)
 
 const posts = ref<Post[]>([])
 
 
 onMounted(async () => {
-  await getResults();
+  await postStore.getPosts(page.value);
+})
+
+watch(page, async () => {
+  await postStore.getPosts(page.value);
+await router.push({ query: { page: page.value } })
 })
 </script>
 <template>
@@ -24,6 +29,10 @@ onMounted(async () => {
       <RouterLink :to="{ name: 'PosteCreate' }">Create Post</RouterLink>
     </div>
     <section class="p-4">
+      <template v-if="postStore.isLoading">
+        <Loading />
+      </template>
+      <template v-else>
       <div class="relative overflow-x-auto bg-white dark:bg-gray-800 shadow-sm rounded-lg border border-gray-200 dark:border-gray-700">
         <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
           <thead class="text-sm text-gray-700 dark:text-gray-400 bg-gray-50 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-700">
@@ -38,9 +47,9 @@ onMounted(async () => {
             </tr>
           </thead>
           <tbody>
-            <template v-if="laravelData.data?.length > 0">
+            <template v-if="postStore.postsCollection">
             <tr
-              v-for="post in laravelData.data"
+              v-for="post in postStore.postsCollection.data"
               :key="post.id"
               class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 last:border-0"
             >
@@ -60,6 +69,7 @@ onMounted(async () => {
                            <RouterLink :to="{ name: 'PostEdit', params: { slug: post.slug }}">
                   <PencilSquareIcon class="w-6 h-6 text-green-500 hover:text-green-700 cursor-pointer" />
                   </RouterLink>
+                  <TrashIcon class="w-6 h-6 text-red-500 hover:text-red-700 cursor-pointer" @click="postStore.deletePost(page,post.slug)" />
                 </div>
               </td>
             </tr>
@@ -70,11 +80,15 @@ onMounted(async () => {
             </tr>
             </template>
           </tbody>
+
         </table>
-            <TailwindPagination
-        :data="laravelData"
-        @pagination-change-page="getResults"
-    />
+<template v-if="postStore.postsCollection">
+  <TailwindPagination
+      :data="postStore.postsCollection"
+      @pagination-change-page="page = $event"
+  />
+</template>
       </div>
+      </template>
     </section>
 </template>
